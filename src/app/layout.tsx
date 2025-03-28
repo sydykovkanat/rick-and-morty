@@ -1,5 +1,6 @@
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
+import NextTopLoader from 'nextjs-toploader';
 import { ReactNode } from 'react';
 
 import { Container, Header } from '@/components/shared';
@@ -24,6 +25,7 @@ export default function RootLayout({
 	return (
 		<html lang={'ru'} className={'dark'}>
 			<body className={GeistSans.variable}>
+				<NextTopLoader color={'#FFF'} height={1.5} />
 				<Container className={'min-h-dvh mt-20'}>
 					<Header />
 					{children}
