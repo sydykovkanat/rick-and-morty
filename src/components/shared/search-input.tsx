@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Form, FormField, Input } from '@/components/ui';
@@ -12,37 +13,28 @@ interface Fields {
 export function SearchInput() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-
-	const defaultValue = searchParams.get('query') ?? '';
+	const queryParam = searchParams.get('query') ?? '';
 
 	const form = useForm<Fields>({
-		defaultValues: {
-			value: defaultValue ?? '',
-		},
+		defaultValues: { value: queryParam },
 	});
 
-	const onChange = (value: string) => {
-		if (value) {
-			form.setValue('value', value);
+	useEffect(() => {
+		form.setValue('value', queryParam);
+	}, [queryParam, form]);
 
-			router.replace('/?query=' + value);
-		} else {
-			form.setValue('value', '');
-
-			router.replace('/');
-		}
-	};
-
-	const onSubmit = (data: Fields) => {
-		console.log(data);
+	const handleSearch = (value: string) => {
+		const newQuery = value.trim();
+		const path = newQuery ? `/?query=${newQuery}` : '/';
+		router.replace(path);
 	};
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
+			<form onSubmit={(e) => e.preventDefault()}>
 				<FormField
 					control={form.control}
-					name={'value'}
+					name='value'
 					render={({ field }) => (
 						<Input
 							className={'rounded-xl'}
@@ -50,7 +42,10 @@ export function SearchInput() {
 							placeholder={'Поиск...'}
 							autoComplete={'off'}
 							{...field}
-							onChange={(e) => onChange(e.target.value)}
+							onChange={(e) => {
+								field.onChange(e);
+								handleSearch(e.target.value);
+							}}
 						/>
 					)}
 				/>
