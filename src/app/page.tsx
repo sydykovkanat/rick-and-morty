@@ -14,27 +14,27 @@ interface Params {
 	status?: string;
 	gender?: string;
 }
-
 export default async function Page({
 	searchParams,
 }: {
 	searchParams: Promise<Params>;
 }) {
 	const params = await searchParams;
-	const name = params.name || '';
 	const currentPage = Number(params.page) || 1;
-	const status = params.status || '';
-	const gender = params.gender || '';
 
 	const { results, info } = await characterService.getAll(
 		currentPage,
-		name,
-		status,
-		gender,
+		params.name || '',
+		params.status || '',
+		params.gender || '',
 	);
 
 	if (results.length === 0 && currentPage > 1) {
-		redirect(`/?name=${name}&page=1`);
+		const redirectParams = new URLSearchParams({
+			...params,
+			page: '1',
+		});
+		redirect(`/?${redirectParams.toString()}`);
 	}
 
 	return (
@@ -48,7 +48,6 @@ export default async function Page({
 					<CharactersPagination
 						currentPage={currentPage}
 						totalPages={info.pages}
-						query={name}
 					/>
 				)}
 			</div>

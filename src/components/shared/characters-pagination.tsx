@@ -1,33 +1,33 @@
+'use client';
+
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui';
 
 interface PaginationProps {
 	currentPage: number;
 	totalPages: number;
-	query?: string;
 }
 
 export function CharactersPagination({
 	currentPage,
 	totalPages,
-	query,
 }: PaginationProps) {
+	const searchParams = useSearchParams();
 	const hasPrev = currentPage > 1;
 	const hasNext = currentPage < totalPages;
+
+	const createQueryString = (page: number) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set('page', page.toString());
+		return params.toString();
+	};
 
 	return (
 		<div className='flex gap-2 justify-center mt-4'>
 			{hasPrev && (
-				<Link
-					href={{
-						pathname: '/',
-						query: {
-							...(query && { query }),
-							page: currentPage - 1,
-						},
-					}}
-				>
+				<Link href={`/?${createQueryString(currentPage - 1)}`}>
 					<Button variant='outline'>Previous</Button>
 				</Link>
 			)}
@@ -37,15 +37,7 @@ export function CharactersPagination({
 			</span>
 
 			{hasNext && (
-				<Link
-					href={{
-						pathname: '/',
-						query: {
-							...(query && { query }),
-							page: currentPage + 1,
-						},
-					}}
-				>
+				<Link href={`/?${createQueryString(currentPage + 1)}`}>
 					<Button variant='outline'>Next</Button>
 				</Link>
 			)}

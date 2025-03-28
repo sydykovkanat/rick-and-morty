@@ -27,19 +27,21 @@ export function useFilters() {
 
 	useEffect(() => {
 		const subscription = form.watch((values) => {
-			const params = new URLSearchParams();
+			const newParams = new URLSearchParams(searchParams.toString());
 
 			Object.entries(values).forEach(([key, value]) => {
 				if (value && value !== 'null') {
-					params.set(key, value);
+					newParams.set(key, value);
+				} else {
+					newParams.delete(key);
 				}
 			});
 
-			router.replace(`/?${params.toString()}`, { scroll: false });
+			router.replace(`/?${newParams.toString()}`, { scroll: false });
 		});
 
 		return () => subscription.unsubscribe();
-	}, [form, router]);
+	}, [form, router, searchParams]);
 
 	useEffect(() => {
 		form.reset({
@@ -47,7 +49,7 @@ export function useFilters() {
 			status: getParam(searchParams, 'status'),
 			gender: getParam(searchParams, 'gender'),
 		});
-	}, [searchParams]);
+	}, [searchParams, form]);
 
 	return form;
 }
