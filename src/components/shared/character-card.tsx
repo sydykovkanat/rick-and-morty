@@ -23,10 +23,18 @@ export function CharacterCard({ character }: Props) {
 			/>
 
 			<div className={'leading-none'}>
-				<div className={'flex items-center gap-3 leading-none'}>
-					<h3>{character.name}</h3>
+				<div
+					className={
+						'flex gap-x-3 flex-col min-[540px]:flex-row min-[540px]:items-center leading-none flex-wrap'
+					}
+				>
+					<h3 className={'line-clamp-1'}>{character.name}</h3>
 
-					<span className={'bg-neutral-700 rounded-full size-2 text-center'} />
+					<span
+						className={
+							'bg-neutral-700 hidden min-[540px]:block rounded-full size-2 text-center'
+						}
+					/>
 
 					<div className={'text-sm text-muted-foreground flex gap-x-1'}>
 						<span className={'first-letter:uppercase'}>{character.status}</span>
