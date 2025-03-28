@@ -1,72 +1,44 @@
 'use client';
 
 import { XIcon } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Control, UseFormSetValue } from 'react-hook-form';
 
-import { Form, FormField, Input } from '@/components/ui';
+import { FormField, Input } from '@/components/ui';
 
-interface Fields {
-	value: string;
+import { FiltersValues } from '@/hooks/use-filters';
+
+interface Props {
+	control: Control<FiltersValues>;
+	setValue: UseFormSetValue<FiltersValues>;
 }
 
-export function SearchInput() {
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const queryParam = searchParams.get('query') ?? '';
-
-	const form = useForm<Fields>({
-		defaultValues: { value: queryParam },
-	});
-
-	useEffect(() => {
-		form.setValue('value', queryParam);
-	}, [queryParam, form]);
-
-	const handleSearch = (value: string) => {
-		const newQuery = value.trim();
-		const path = newQuery ? `/?query=${newQuery}` : '/';
-		router.replace(path);
-	};
-
-	const clearSearch = () => {
-		form.setValue('value', '');
-		router.replace('/');
-	};
-
+export function SearchInput({ control, setValue }: Props) {
 	return (
-		<Form {...form}>
-			<form onSubmit={(e) => e.preventDefault()} className={'relative'}>
-				<FormField
-					control={form.control}
-					name='value'
-					render={({ field }) => (
-						<Input
-							className={'rounded-xl'}
-							type={'text'}
-							placeholder={'Search...'}
-							autoComplete={'off'}
-							{...field}
-							onChange={(e) => {
-								field.onChange(e);
-								handleSearch(e.target.value);
-							}}
-						/>
-					)}
-				/>
-				{form.getValues('value') && (
-					<button
-						type={'button'}
-						className={
-							'absolute right-4 top-1/2 -translate-y-1/2 stroke-[1.5] text-muted-foreground'
-						}
-						onClick={clearSearch}
-					>
-						<XIcon />
-					</button>
+		<div className='relative'>
+			<FormField
+				control={control}
+				name='name'
+				render={({ field }) => (
+					<Input
+						{...field}
+						className='rounded-xl pr-10'
+						placeholder='Search characters...'
+						autoComplete='off'
+						onChange={(e) => {
+							field.onChange(e);
+						}}
+					/>
 				)}
-			</form>
-		</Form>
+			/>
+			{control._formValues.name && (
+				<button
+					type='button'
+					className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground'
+					onClick={() => setValue('name', '')}
+				>
+					<XIcon className='h-4 w-4' />
+				</button>
+			)}
+		</div>
 	);
 }

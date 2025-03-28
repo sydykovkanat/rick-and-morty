@@ -3,14 +3,16 @@ import { redirect } from 'next/navigation';
 import {
 	CharactersList,
 	CharactersPagination,
-	SearchInput,
+	Filters,
 } from '@/components/shared';
 
 import { characterService } from '@/services/character.service';
 
 interface Params {
-	query?: string;
+	name?: string;
 	page?: string;
+	status?: string;
+	gender?: string;
 }
 
 export default async function Page({
@@ -19,20 +21,25 @@ export default async function Page({
 	searchParams: Promise<Params>;
 }) {
 	const params = await searchParams;
-	const query = params.query || '';
+	const name = params.name || '';
 	const currentPage = Number(params.page) || 1;
+	const status = params.status || '';
+	const gender = params.gender || '';
 
-	const { results, info } = await characterService.getAll(query, currentPage);
+	const { results, info } = await characterService.getAll(
+		currentPage,
+		name,
+		status,
+		gender,
+	);
 
 	if (results.length === 0 && currentPage > 1) {
-		redirect(`/?query=${query}&page=1`);
+		redirect(`/?name=${name}&page=1`);
 	}
 
 	return (
 		<div className='bg-neutral-900 min-h-screen rounded-t-4xl border-x-[0.5] border-t-[0.5]'>
-			<div className='p-4 border-b-[0.5]'>
-				<SearchInput />
-			</div>
+			<Filters />
 
 			<div className='p-4'>
 				<CharactersList characters={results} />
@@ -41,7 +48,7 @@ export default async function Page({
 					<CharactersPagination
 						currentPage={currentPage}
 						totalPages={info.pages}
-						query={query}
+						query={name}
 					/>
 				)}
 			</div>

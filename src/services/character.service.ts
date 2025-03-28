@@ -4,14 +4,16 @@ import { Character } from '@/shared/types/character.interface';
 import { Response } from '@/shared/types/response.interface';
 
 class CharacterService {
-	async getAll(query?: string, page?: number) {
+	async getAll(page?: number, name?: string, status?: string, gender?: string) {
 		try {
 			const { data } = await api<Response<Character>>({
 				method: 'GET',
 				url: '/character',
 				params: {
-					name: query,
+					name,
 					page,
+					status,
+					gender,
 				},
 			});
 
