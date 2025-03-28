@@ -45,7 +45,7 @@ export function SearchInput() {
 						<Input
 							className={'rounded-xl'}
 							type={'text'}
-							placeholder={'Поиск...'}
+							placeholder={'Search...'}
 							autoComplete={'off'}
 							{...field}
 							onChange={(e) => {
