@@ -1,5 +1,6 @@
 'use client';
 
+import { XIcon } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -29,9 +30,14 @@ export function SearchInput() {
 		router.replace(path);
 	};
 
+	const clearSearch = () => {
+		form.setValue('value', '');
+		router.replace('/');
+	};
+
 	return (
 		<Form {...form}>
-			<form onSubmit={(e) => e.preventDefault()}>
+			<form onSubmit={(e) => e.preventDefault()} className={'relative'}>
 				<FormField
 					control={form.control}
 					name='value'
@@ -49,6 +55,17 @@ export function SearchInput() {
 						/>
 					)}
 				/>
+				{form.getValues('value') && (
+					<button
+						type={'button'}
+						className={
+							'absolute right-4 top-1/2 -translate-y-1/2 stroke-[1.5] text-muted-foreground'
+						}
+						onClick={clearSearch}
+					>
+						<XIcon />
+					</button>
+				)}
 			</form>
 		</Form>
 	);

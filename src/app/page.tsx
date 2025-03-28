@@ -20,12 +20,16 @@ export default async function Page({ searchParams }: Params) {
 	return (
 		<div
 			className={
-				'bg-neutral-900 min-h-screen rounded-t-4xl border-[0.5] p-4 space-y-6'
+				'bg-neutral-900 min-h-screen rounded-t-4xl border-x-[0.5] border-t-[0.5]'
 			}
 		>
-			<SearchInput />
+			<div className={'p-4 border-b-[0.5]'}>
+				<SearchInput />
+			</div>
 
-			<CharactersList characters={results} />
+			<div className={'p-4'}>
+				<CharactersList characters={results} />
+			</div>
 		</div>
 	);
 }
