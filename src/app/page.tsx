@@ -29,7 +29,19 @@ export default async function Page({
 		params.gender || '',
 	);
 
-	if (results.length === 0 && currentPage > 1) {
+	if (info.pages === 0) {
+		if (currentPage !== 1) {
+			const redirectParams = new URLSearchParams(params as string);
+			redirectParams.delete('page');
+			redirect(`/?${redirectParams.toString()}`);
+		}
+	} else if (currentPage > info.pages) {
+		const redirectParams = new URLSearchParams({
+			...params,
+			page: info.pages.toString(),
+		});
+		redirect(`/?${redirectParams.toString()}`);
+	} else if (results.length === 0 && currentPage > 1) {
 		const redirectParams = new URLSearchParams({
 			...params,
 			page: '1',
@@ -40,10 +52,8 @@ export default async function Page({
 	return (
 		<div className='bg-neutral-900 min-h-screen rounded-t-4xl border-x-[0.5] border-t-[0.5]'>
 			<Filters />
-
 			<div className='p-4'>
 				<CharactersList characters={results} />
-
 				{info.pages > 1 && (
 					<CharactersPagination
 						currentPage={currentPage}

@@ -15,6 +15,12 @@ export const metadata: Metadata = {
 		template: `%s • ${SITE_NAME}`,
 	},
 	description: SITE_DESCRIPTION,
+	openGraph: {
+		images: '/aidaika.jpg',
+		title: SITE_NAME,
+		description:
+			'Айдусечка - милая и умная девочка, с которой очень интересно общаться!',
+	},
 };
 
 export default function RootLayout({

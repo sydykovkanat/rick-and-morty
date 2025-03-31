@@ -1,3 +1,3 @@
-export const SITE_NAME = 'Find rick and morty';
+export const SITE_NAME = 'Rick & Morty: Кто Ты Сегодня?';
 export const SITE_DESCRIPTION =
-	'This is a simple app to find rick and morty characters';
+	'Исследуйте вселенную Рика и Морти! Найдите персонажей по статусу и гендеру, откройте новые локации и вспомните любимые эпизоды. Удобный поиск и полное погружение в безумный мир мультивселенной ждут вас!';

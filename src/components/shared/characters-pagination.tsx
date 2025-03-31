@@ -24,6 +24,8 @@ export function CharactersPagination({
 		return params.toString();
 	};
 
+	if (totalPages <= 1) return null;
+
 	return (
 		<div className='flex gap-2 justify-center mt-4'>
 			{hasPrev && (
@@ -31,11 +33,9 @@ export function CharactersPagination({
 					<Button variant='outline'>Previous</Button>
 				</Link>
 			)}
-
 			<span className='flex items-center px-4 text-sm text-muted-foreground'>
-				Page {currentPage} of {totalPages || 1}
+				Page {currentPage} of {totalPages}
 			</span>
-
 			{hasNext && (
 				<Link href={`/?${createQueryString(currentPage + 1)}`}>
 					<Button variant='outline'>Next</Button>
